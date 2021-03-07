@@ -4,12 +4,14 @@
 # connected to serial Port
 # Publishes Data to InfluxDB
 
+import os
 import sys
 import serial
 import logging
 import threading
 import json
 import requests
+from glob import glob
 from influxdb import InfluxDBClient
 from datetime import datetime
 
@@ -127,34 +129,27 @@ if __name__ == "__main__":
     format = "%(asctime)s: %(message)s"
     logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
-    
-    # datetime object containing current date and time
-    try:
-        with open('meter_reader.json', 'r') as f:
-            config = json.load(f)
-    except FileNotFoundError:
-        logging.error('Config file not found!')
-        exit(1)
-    except json.JSONDecodeError:
-        logging.error('Config file not valid JSON!')
-        exit(1)
 
-    influx_host = config['influxdb']['host']
-    influx_port = config['influxdb']['port']
-    influx_username = config['influxdb']['user']
-    influx_password = config['influxdb']['password']
-    influx_database = config['influxdb']['database']
+    influx_host = os.getenv('INFLUXDB_HOST', 'influxdb.influxdb')
+    influx_port = int(os.getenv('INFLUXDB_PORT', '8086')) 
+    influx_username = os.getenv('INFLUXDB_USER', 'meter_reader')
+    influx_password = os.getenv('INFLUXDB_PASSWORD')
+    influx_database = os.getenv('INFLUXDB_DATABASE', 'meter_reader')
 
     influx = InfluxDBClient(influx_host, influx_port, influx_username, influx_password, influx_database)
 
     threads = list()
-    for serialport in config['ports']:
-        logging.info(f"Main    : create and start thread for {serialport}")
-        x = MeterReader(influx, serialport)
-        threads.append(x)
-        x.start()
+    serial_ports = glob('/dev/ttyMETER*')
+    if len(serial_ports) == 0:
+        logging.info("No serial ports found!")
+    else:
+        for serialport in serial_ports:
+            logging.info(f"Create and start thread for {serialport}")
+            x = MeterReader(influx, serialport)
+            threads.append(x)
+            x.start()
 
-    for index, thread in enumerate(threads):
-        logging.info("Main    : before joining thread %d.", index)
-        thread.join()
-        logging.info("Main    : thread %d done", index)
+        for index, thread in enumerate(threads):
+            logging.info("Main    : before joining thread %d.", index)
+            thread.join()
+            logging.info("Main    : thread %d done", index)
