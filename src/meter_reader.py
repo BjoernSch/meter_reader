@@ -44,6 +44,7 @@ class MeterReader(threading.Thread):
             b'1-0:21.7.0' : ('power_l1_w', 'float', True),
             b'1-0:41.7.0' : ('power_l2_w', 'float', True),
             b'1-0:61.7.0' : ('power_l3_w', 'float', True),
+            # Some flags are known
             b'1-0:96.5.5' : ('status', 'flags', True)
         }
     }
