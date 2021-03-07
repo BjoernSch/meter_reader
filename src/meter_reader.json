@@ -1,0 +1,13 @@
+{
+    "influxdb":{
+        "host":"influxdb.influxdb",
+        "port": 8086,
+        "user":"meter_reader",
+        "password":"my secret password",
+        "database":"meter_reader"
+    },
+    "ports":[
+        "/dev/ttyUSB0",
+        "/dev/ttyUSB1"
+    ]
+}
