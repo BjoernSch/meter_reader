@@ -9,7 +9,6 @@ import sys
 import serial
 import logging
 import threading
-import json
 import requests
 from glob import glob
 from influxdb import InfluxDBClient
