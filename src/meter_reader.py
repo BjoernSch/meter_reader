@@ -63,6 +63,7 @@ class MeterReader(threading.Thread):
             exit(2)
             
         self.influx = influx
+        self.mqttc = mqttc
 
     def run(self):
         start = False
