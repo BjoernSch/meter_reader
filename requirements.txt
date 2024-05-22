@@ -1,3 +1,4 @@
 influxdb
 pyserial
 requests
+paho-mqtt
