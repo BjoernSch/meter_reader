@@ -106,7 +106,7 @@ class MeterReader(threading.Thread):
                     if self.mqttc:
                         for key, (value, log) in data.items():
                             if log == True:
-                                self.mqttc.publish(f"/{mqtt_topic}/{data['device_id'][0]}/{key}", value)
+                                self.mqttc.publish(f"{mqtt_topic}/{data['device_id'][0]}/{key}", value)
                     
                     start = False
             elif start == True:
