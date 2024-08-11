@@ -8,9 +8,11 @@ Connect IR -> USB converter to your meter and the server and link the interfaces
 Multiple Interfaces at the same time are supported.
 ASCII Format is expected.
 
-Docker:
-https://hub.docker.com/r/bjoernsch/meter_reader
-bjoernsch/meter_reader
+Docker Container:
+
+https://github.com/BjoernSch/meter_reader/pkgs/container/meter_reader
+
+``ghcr.io/bjoernsch/meter_reader:latest``
 
 ## Supported enviroment variables:
 If *_HOST is not set, the function is disabled:
